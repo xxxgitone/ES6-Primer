@@ -1,0 +1,27 @@
+{
+  "name": "es6",
+  "version": "1.0.0",
+  "description": "ECMAScript6 入门",
+  "main": "index.js",
+  "dependencies": {
+    "babel-preset-es2015": "^6.18.0",
+    "babel-preset-react": "^6.16.0",
+    "babel-preset-stage-2": "^6.18.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.18.0"
+  },
+  "scripts": {
+    "build":"babel src -d lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xxxgitone/ES6-Primer.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xxxgitone/ES6-Primer/issues"
+  },
+  "homepage": "https://github.com/xxxgitone/ES6-Primer#readme"
+}
