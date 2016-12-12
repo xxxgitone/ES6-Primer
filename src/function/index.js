@@ -111,6 +111,16 @@
 // // 等同于
 // Math.max(14, 3, 77);
 
+// 通过push函数，将一个数组添加到另一个数组中
+// ES5的写法
+// var arr1 = [0, 1, 2];
+// var arr2 = [3, 4, 5];
+// Array.prototype.push.apply(arr1, arr2);
+
+// // ES6的写法
+// var arr1 = [0, 1, 2];
+// var arr2 = [3, 4, 5];
+// arr1.push(...arr2);
 
 
 
