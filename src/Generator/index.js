@@ -28,6 +28,26 @@
 
 //不可以在普通函数中使用yield语句
 
+//用生成器实现斐波那契数列
+// function* fibo() {
+// 	let a = 0;
+// 	let b = 1;
+
+// 	yield a;
+// 	yield b;
+
+// 	while(true) {
+// 		let next = a + b;
+// 		a = b;
+// 		b = next;
+// 		yield next;
+// 	}
+// }
+
+// let generator = fibo();
+
+// for(let i = 0; i < 10; i++)
+// 	console.log(generator.next().value);//0 1 1 2 3 5 8 13 21 34 55
 
 
 
