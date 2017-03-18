@@ -1,8 +1,8 @@
 # ES6-Primer
 ECMAScript6 入门
 
-###安装Babel转换器
-####1.配置文件
+### 安装Babel转换器
+#### 1.配置文件
 
 *	在文件根目录下新建文件`.babelrc`，并写入
 
@@ -33,7 +33,7 @@ ECMAScript6 入门
 		    "plugins": []
 		}
 
-####2.命令行转码
+#### 2.命令行转码
 *	安装babel-cli转码工具
 
 		npm install babel-cli -g 
