@@ -49,7 +49,91 @@
 // for(let i = 0; i < 10; i++)
 // 	console.log(generator.next().value);//0 1 1 2 3 5 8 13 21 34 55
 
+// var gimmeSomething = (function () {
+// 	var nextVal;
 
+// 	return function () {
+// 		if (nextVal === undefined) {
+// 			nextVal = 1;
+// 		} else {
+// 			nextVal = (3 * nextVal) + 6
+// 		}
+
+// 		return nextVal;
+// 	}
+// })();
+
+// console.log(gimmeSomething()); //1
+// console.log(gimmeSomething());//9
+// console.log(gimmeSomething());//33
+// console.log(gimmeSomething());//105
+
+
+//为数字序列生成器实现标准的迭代器接口
+// var something = (function () {
+// 	var nextVal;
+
+// 	return {
+// 		// for ... of循环需要
+// 		[Symbol.iterator]: function () {
+// 			return this;
+// 		},
+		
+// 		//标准迭代器接口方法
+// 		next: function () {
+// 			if (nextVal === undefined) {
+// 				nextVal = 1;
+// 			} else {
+// 				nextVal = (3 * nextVal) + 6;
+// 			}
+
+// 			return { done: false, value: nextVal }
+
+// 		}
+// 	}
+// })();
+
+// console.log(something.next().value) //1
+// console.log(something.next().value) //9
+// console.log(something.next().value) //33
+// console.log(something.next().value) //105
+
+//使用for..of循环，自动迭代标准迭代器
+// for(var v of something){
+// 	console.log(v);
+
+// 	if (v > 500) {
+// 		break;
+// 	}
+// }
+
+//1 9 33 105 321 969
+
+
+//通过生成器实现实现前面的数字序列
+function *something() {
+	var nextVal;
+
+	while(true) {
+		if (nextVal === undefined) {
+			nextVal = 1;
+		} else {
+			nextVal = (3 * nextVal) + 6;
+		}
+
+		yield nextVal;
+	}
+}
+
+for(var v of something()){//这里并不是直接写something
+	console.log(v);
+
+	if (v > 500) {
+		break;
+	}
+}
+
+//1 9 33 105 321 969
 
 
 
