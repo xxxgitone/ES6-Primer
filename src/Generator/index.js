@@ -111,30 +111,190 @@
 
 
 //通过生成器实现实现前面的数字序列
-function *something() {
-	var nextVal;
+// function *something() {
+// 	var nextVal;
 
-	while(true) {
-		if (nextVal === undefined) {
-			nextVal = 1;
-		} else {
-			nextVal = (3 * nextVal) + 6;
-		}
+// 	while(true) {
+// 		if (nextVal === undefined) {
+// 			nextVal = 1;
+// 		} else {
+// 			nextVal = (3 * nextVal) + 6;
+// 		}
 
-		yield nextVal;
-	}
-}
+// 		yield nextVal;
+// 	}
+// }
 
-for(var v of something()){//这里并不是直接写something
-	console.log(v);
+// for(var v of something()){//这里并不是直接写something
+// 	console.log(v);
 
-	if (v > 500) {
-		break;
-	}
-}
+// 	if (v > 500) {
+// 		break;
+// 	}
+// }
 
 //1 9 33 105 321 969
 
+
+
+// function foo(x, y, cb) {
+// 	ajax('http://xxxx.com/?x=' + x + '&y=' + y, cb);
+// }
+
+// foo(11, 13, function (err, text) {
+// 	if (err) {
+// 		console.error(err);
+// 	} else {
+// 		console.log(text);
+// 	}
+// })
+
+// ////异步迭代生成器,表达同样的任务流程控制
+// function foo(x, y) {
+// 	ajax('http://xxxx.com/?x=' + x + '&y=' + y,
+// 		  function (err, data) {
+// 		  	if (err) {
+// 		  		//向*main()抛出一个错误
+// 		  		it.throw(err);
+// 		  	} else {
+// 		  		//用接收到的data回复*main()
+// 		  		it.next(data);
+// 		  	}
+// 		  }
+// 	)
+// }
+
+// function *main() {
+// 	try {
+// 		var text = yield foo(11, 31); //这里返回undefined
+// 		console.log(text);
+// 	}
+// 	catch (err) {
+// 		console.log(err);
+// 	}
+// }
+
+// var it = main();
+
+// it.next();
+
+
+
+// 假定ajax( {url}, {callback})存在
+// function request(url) {
+// 	return new Promise(function (resolve, reject) {
+		
+// 		ajax(url, resolve);
+// 	})
+// }
+
+
+//生成器+Promise
+
+//前面的ajax例子基于Promise实现
+// function foo(x, y) {
+// 	return request('http://xxxx.com/?x=' + x + '&y=' + y);
+// }
+
+// foo(11, 31)
+// 	.then(function (text) {
+// 		console.log(text);
+// 	},function (err) {
+// 		console.log(err);
+// 	})
+
+//获得Promise和生成器最大效用的最自然的方法就是yield出来一个Promise
+// 然后通过Promise来控制生成器的迭代器
+// function foo(x, y) {
+// 	return request('http://xxxx.com/?x=' + x + '&y=' + y);
+// }
+
+// function *main() {
+// 	try {
+// 		var text = yield foo(11, 31); //foo返回的是一个promis
+// 		console.log(text);
+// 	}
+// 	catch (err) {
+// 		console.error(err);
+// 	}
+// }
+
+// var it = main();
+// var p = it.next().value;
+
+// p.then(function (text) {
+// 	it.next(text)
+// }, function (err) {
+// 	it.throw(err);
+// })
+
+
+//支持Promise的Generator Runner,自动异步运行传入的生成器，直到结束
+// function run(gen) {
+// 	var args = [].slice.call(arguments, 1), it;
+	
+// 	//在当前上下文初始化生成器
+// 	it = gen.apply(this, args);
+	
+// 	// 返回一个Promise用于生成器完成
+// 	return Promise.resolve()
+// 		.then(function handleNext(value) {
+			
+// 			var next = it.next(value);
+
+// 			retrun (function handleResult(next) {
+// 				if (next.done) {
+// 					return next.value;
+// 				} else {
+// 					return Promise.resolve(next.value)
+// 						.then(function handleErr(err) {
+// 							return Promise.resolve(it.throw(err))
+// 								.then(handleResult);
+// 						})
+// 				}
+// 			})(next);
+// 		})
+// }
+
+
+// function *main() {
+// 	try {
+// 		var text = yield foo(11, 31); //foo返回的是一个promis
+// 		console.log(text);
+// 	}
+// 	catch (err) {
+// 		console.error(err);
+// 	}
+// }
+
+// run( main )
+
+
+
+//生成器委托
+function *foo() {
+	console.log('*foo() starting');
+	yield 3;
+	yield 4;
+	console.log('*foo() finished');
+}
+
+function *bar() {
+	yield 1;
+	yield 2;
+	yield *foo();
+	yield 5;
+}
+
+var it = bar();
+
+it.next().value; //1
+it.next().value; //2
+it.next().value; //starting
+				//3
+it.next().value; //4
+it.next().value; //5
+				//end
 
 
 
