@@ -272,29 +272,114 @@
 
 
 //生成器委托
-function *foo() {
-	console.log('*foo() starting');
-	yield 3;
-	yield 4;
-	console.log('*foo() finished');
+// function *foo() {
+// 	console.log('*foo() starting');
+// 	yield 3;
+// 	yield 4;
+// 	console.log('*foo() finished');
+// }
+
+// function *bar() {
+// 	yield 1;
+// 	yield 2;
+// 	yield *foo();
+// 	yield 5;
+// }
+
+// var it = bar();
+
+// it.next().value; //1
+// it.next().value; //2
+// it.next().value; //starting
+// 				//3
+// it.next().value; //4
+// it.next().value; //5
+// 				//end
+
+//并发,并确保第一个存储在res[0]中
+// function response(data) {
+// 	if (data.url == 'http://some.url.1') {
+// 		res[0] = data;
+// 	} else if (data.url == 'http://.url.2') {
+// 		res[1] = data;
+// 	}
+// }
+
+//上面场景使用多个并发生成器
+//repuest是个支持Promise的ajax工具
+// var res = [];
+
+// function *reqData(url) {
+// 	res.push(
+// 		yield request( url );
+// 	);
+// }
+
+//Promise手工实现，安排这些交互
+// var it1 = reqData('http://some.url.1');
+// var it2 = reqData('http://some.url.2');
+
+// var p1 = it1.next();
+// var p2 = it2.next();
+
+// p1.then(function (data) {
+// 	it1.next(data);
+// 	return p2;
+// }).then(function (data) {
+// 	it2.next(data);
+// });
+
+//上面方法不能让生成器自己来协调
+
+//repuest是个支持Promise的ajax工具
+
+//形实转换程序
+//thunk，Javascript中的thunk是指一个用于调用另外一个函数的函数，没有任何参数
+// function foo(x, y) {
+// 	return x + y;
+// }
+
+// function fooThunk() {
+// 	return foo(3,4);
+// }
+
+// console.log(fooThunk()); //7
+
+//异步thunk，添加一个参数
+function foo(x, y, cb) {
+	setTimeout(function () {
+		cb(x + y);
+	}, 1000);
 }
 
-function *bar() {
-	yield 1;
-	yield 2;
-	yield *foo();
-	yield 5;
+// function fooThunk(cb) {
+// 	foo(3, 4, cb);
+// }
+
+// fooThunk(function (sum) {
+// 	console.log(sum);  //7
+// })
+
+//封装一个thunk
+function thunkify(fn) {
+	var args = [].slice.call(arguments, 1);
+	return function (cb) {
+		args.push(cb);
+		return fn.apply(null, args);
+	};
 }
 
-var it = bar();
+var fooThunk = thunkify(foo, 3, 4);
 
-it.next().value; //1
-it.next().value; //2
-it.next().value; //starting
-				//3
-it.next().value; //4
-it.next().value; //5
-				//end
+fooThunk(function (sum) {
+	console.log(sum); //7
+})
+
+
+
+
+
+
 
 
 
